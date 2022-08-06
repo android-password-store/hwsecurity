@@ -1,3 +1,4 @@
+rootProject.name = "hwsec"
 include ':hwsecurity:core'
 include ':hwsecurity:intent-usb'
 include ':hwsecurity:intent-nfc'
@@ -7,3 +8,5 @@ include ':hwsecurity:fido2'
 include ':hwsecurity:openpgp'
 include ':hwsecurity:piv'
 include ':hwsecurity:ui'
+include ':hwsecurity:sshj'
+include ':hwsecurity:ssh'
