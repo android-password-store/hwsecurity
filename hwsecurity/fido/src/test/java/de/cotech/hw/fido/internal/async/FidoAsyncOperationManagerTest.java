@@ -25,6 +25,7 @@
 package de.cotech.hw.fido.internal.async;
 
 
+import java.time.Duration;
 import java.util.concurrent.CountDownLatch;
 
 import org.junit.Before;
@@ -34,8 +35,13 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowLooper;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
+import static org.robolectric.Shadows.shadowOf;
+
+import android.os.Looper;
 
 
 @RunWith(RobolectricTestRunner.class)
@@ -54,7 +60,10 @@ public class FidoAsyncOperationManagerTest {
         TestFidoOperationThread thread = new TestFidoOperationThread();
         fidoAsyncOperationManager.startAsyncOperation(null, thread);
         FidoAsyncOperationManagerUtil.joinRunningThread(fidoAsyncOperationManager);
-        assertTrue(ShadowLooper.getShadowMainLooper().getScheduler().runOneTask());
+        final ShadowLooper looper = shadowOf(Looper.getMainLooper());
+        assertNotEquals(looper.getNextScheduledTaskTime(), Duration.ZERO);
+        looper.idle();
+        assertEquals(looper.getNextScheduledTaskTime(), Duration.ZERO);
         thread.assertLatchOk();
     }
 
@@ -65,7 +74,10 @@ public class FidoAsyncOperationManagerTest {
         fidoAsyncOperationManager.startAsyncOperation(null, thread);
         fidoAsyncOperationManager.clearAsyncOperation();
         FidoAsyncOperationManagerUtil.joinRunningThread(fidoAsyncOperationManager);
-        assertFalse(ShadowLooper.getShadowMainLooper().getScheduler().runOneTask());
+        final ShadowLooper looper = shadowOf(Looper.getMainLooper());
+        assertEquals(looper.getNextScheduledTaskTime(), Duration.ZERO);
+        looper.idle();
+        assertEquals(looper.getNextScheduledTaskTime(), Duration.ZERO);
     }
 
 

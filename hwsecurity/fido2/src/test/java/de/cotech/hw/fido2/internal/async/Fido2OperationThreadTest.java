@@ -31,7 +31,14 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowLooper;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
+import static org.robolectric.Shadows.shadowOf;
+
+import android.os.Looper;
+
+import java.time.Duration;
 
 
 @RunWith(RobolectricTestRunner.class)
@@ -44,7 +51,10 @@ public class Fido2OperationThreadTest {
 
         thread.start();
         thread.join();
-        assertTrue(ShadowLooper.getShadowMainLooper().getScheduler().runOneTask());
+        final ShadowLooper looper = shadowOf(Looper.getMainLooper());
+        assertNotEquals(looper.getNextScheduledTaskTime(), Duration.ZERO);
+        looper.idle();
+        assertEquals(looper.getNextScheduledTaskTime(), Duration.ZERO);
 
         thread.assertLatchOk();
     }

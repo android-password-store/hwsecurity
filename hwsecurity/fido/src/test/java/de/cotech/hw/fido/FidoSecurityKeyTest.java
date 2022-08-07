@@ -31,7 +31,6 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import de.cotech.hw.SecurityKeyManagerConfig;
-import de.cotech.hw.exceptions.InsNotSupportedException;
 import de.cotech.hw.fido.exceptions.FidoPresenceRequiredException;
 import de.cotech.hw.fido.exceptions.FidoU2fDisabledException;
 import de.cotech.hw.fido.exceptions.FidoWrongKeyHandleException;
@@ -44,12 +43,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
-import org.robolectric.shadows.ShadowLooper;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.robolectric.Shadows.shadowOf;
+
+import android.os.Looper;
 
 
 @SuppressWarnings("WeakerAccess")
@@ -130,7 +131,7 @@ public class FidoSecurityKeyTest {
                     }
                 },null);
         FidoAsyncOperationManagerUtil.joinRunningThread(fidoAsyncOperationManager);
-        assertTrue(ShadowLooper.getShadowMainLooper().getScheduler().runOneTask());
+        shadowOf(Looper.getMainLooper()).idle();
         assertTrue(countDownLatch.await(1, TimeUnit.SECONDS));
     }
 
@@ -155,7 +156,7 @@ public class FidoSecurityKeyTest {
                     }
                 },null);
         FidoAsyncOperationManagerUtil.joinRunningThread(fidoAsyncOperationManager);
-        assertTrue(ShadowLooper.getShadowMainLooper().getScheduler().runOneTask());
+        shadowOf(Looper.getMainLooper()).idle();
         assertTrue(countDownLatch.await(1, TimeUnit.SECONDS));
     }
 
@@ -232,7 +233,7 @@ public class FidoSecurityKeyTest {
                     }
                 }, null);
         FidoAsyncOperationManagerUtil.joinRunningThread(fidoAsyncOperationManager);
-        assertTrue(ShadowLooper.getShadowMainLooper().getScheduler().runOneTask());
+        shadowOf(Looper.getMainLooper()).idle();
         assertTrue(countDownLatch.await(1, TimeUnit.SECONDS));
     }
 
@@ -259,7 +260,7 @@ public class FidoSecurityKeyTest {
                     }
                 }, null);
         FidoAsyncOperationManagerUtil.joinRunningThread(fidoAsyncOperationManager);
-        assertTrue(ShadowLooper.getShadowMainLooper().getScheduler().runOneTask());
+        shadowOf(Looper.getMainLooper()).idle();
         assertTrue(countDownLatch.await(1, TimeUnit.SECONDS));
     }
 
@@ -285,7 +286,7 @@ public class FidoSecurityKeyTest {
                     }
                 }, null);
         FidoAsyncOperationManagerUtil.joinRunningThread(fidoAsyncOperationManager);
-        assertTrue(ShadowLooper.getShadowMainLooper().getScheduler().runOneTask());
+        shadowOf(Looper.getMainLooper()).idle();
         assertTrue(countDownLatch.await(1, TimeUnit.SECONDS));
     }
 
@@ -312,7 +313,7 @@ public class FidoSecurityKeyTest {
                     }
                 }, null);
         FidoAsyncOperationManagerUtil.joinRunningThread(fidoAsyncOperationManager);
-        assertTrue(ShadowLooper.getShadowMainLooper().getScheduler().runOneTask());
+        shadowOf(Looper.getMainLooper()).idle();
         assertTrue(countDownLatch.await(1, TimeUnit.SECONDS));
     }
 
@@ -339,7 +340,7 @@ public class FidoSecurityKeyTest {
                     }
                 }, null);
         FidoAsyncOperationManagerUtil.joinRunningThread(fidoAsyncOperationManager);
-        assertTrue(ShadowLooper.getShadowMainLooper().getScheduler().runOneTask());
+        shadowOf(Looper.getMainLooper()).idle();
         assertTrue(countDownLatch.await(1, TimeUnit.SECONDS));
         assertEquals(FidoWrongKeyHandleException.class, thrownException[0].getClass());
     }
@@ -366,7 +367,7 @@ public class FidoSecurityKeyTest {
                     }
                 }, null);
         FidoAsyncOperationManagerUtil.joinRunningThread(fidoAsyncOperationManager);
-        assertTrue(ShadowLooper.getShadowMainLooper().getScheduler().runOneTask());
+        shadowOf(Looper.getMainLooper()).idle();
         assertTrue(countDownLatch.await(1, TimeUnit.SECONDS));
         assertEquals(FidoU2fDisabledException.class, thrownException[0].getClass());
     }
