@@ -87,7 +87,7 @@ afterEvaluate {
     }
 }
 
-dokkaHugo {
+tasks.dokkaHtml.configure {
     outputDirectory.set(file("$projectDir/../../hwsecurity.dev/content/reference"))
 
     moduleName.set("hwsecurity-ui")

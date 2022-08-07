@@ -5,27 +5,12 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.2'
-        classpath 'org.jetbrains.dokka:dokka-gradle-plugin:1.4.20'
-    }
-}
-
-allprojects {
-    repositories {
-        google()
-        maven { url 'https://jitpack.io' }
-        jcenter()
-    }
-
-    // custom dokka format
-    tasks.register("dokkaHugo", org.jetbrains.dokka.gradle.DokkaTask) {
-        dependencies {
-            dokkaHugoPlugin 'com.github.cotechde:dokka-hugo-plugin:2.0'
-        }
+        classpath 'com.android.tools.build:gradle:7.2.2'
+        classpath 'org.jetbrains.dokka:dokka-gradle-plugin:1.7.10'
     }
 }
 
 ext {
-    compileSdkVersion = 29
+    compileSdkVersion = 33
     hwSdkVersionName = '4.4.0'
 }

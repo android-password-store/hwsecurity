@@ -43,6 +43,8 @@ import net.schmizz.sshj.userauth.method.AbstractAuthMethod;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
+import java.util.LinkedList;
+import java.util.Queue;
 
 import de.cotech.hw.SecurityKeyAuthenticator;
 import de.cotech.hw.util.HwTimber;
@@ -56,6 +58,7 @@ public class SecurityKeySshjAuthMethod extends AbstractAuthMethod {
 
     SecurityKeyAuthenticator securityKeyAuthenticator;
     PublicKey key;
+    private Queue<KeyAlgorithm> available;
 
     /**
      * Initialize this method with the provider for public and private key.
@@ -63,6 +66,22 @@ public class SecurityKeySshjAuthMethod extends AbstractAuthMethod {
     public SecurityKeySshjAuthMethod(SecurityKeyAuthenticator securityKeyAuthenticator) {
         super("publickey");
         this.securityKeyAuthenticator = securityKeyAuthenticator;
+    }
+
+    private KeyAlgorithm getPublicKeyAlgorithm(KeyType keyType) throws TransportException {
+        if (available == null) {
+            available = new LinkedList<>(params.getTransport().getClientKeyAlgorithms(keyType));
+        }
+        return available.peek();
+    }
+
+    @Override
+    public boolean shouldRetry() {
+        if (available != null) {
+            available.poll();
+            return !available.isEmpty();
+        }
+        return false;
     }
 
     /**
@@ -111,7 +130,7 @@ public class SecurityKeySshjAuthMethod extends AbstractAuthMethod {
         PublicKey key = retrievePublicKey();
         KeyType keyType = KeyType.fromKey(key);
         try {
-            KeyAlgorithm ka = params.getTransport().getClientKeyAlgorithm(keyType);
+            KeyAlgorithm ka = getPublicKeyAlgorithm(keyType);
             reqBuf.putString(ka.getKeyAlgorithm())
                     .putString(new Buffer.PlainBuffer().putPublicKey(key).getCompactData());
             return reqBuf;
@@ -125,7 +144,7 @@ public class SecurityKeySshjAuthMethod extends AbstractAuthMethod {
         final KeyType kt = KeyType.fromKey(key);
         Signature signature;
         try {
-            signature = params.getTransport().getClientKeyAlgorithm(kt).newSignature();
+            signature = getPublicKeyAlgorithm(kt).newSignature();
         } catch (TransportException e) {
             throw new UserAuthException("No KeyAlgorithm configured for key " + kt);
         }

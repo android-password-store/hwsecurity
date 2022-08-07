@@ -5,7 +5,7 @@ apply plugin: 'org.jetbrains.dokka'
 dependencies {
     api project(':hwsecurity:core')
 
-    implementation 'org.bouncycastle:bcprov-jdk15on:1.65'
+    implementation 'org.bouncycastle:bcprov-jdk15to18:1.71'
 
     compileOnly 'androidx.annotation:annotation:1.1.0'
 
@@ -86,7 +86,7 @@ afterEvaluate {
     }
 }
 
-dokkaHugo {
+tasks.dokkaHtml.configure {
     outputDirectory.set(file("$projectDir/../../hwsecurity.dev/content/reference"))
 
     moduleName.set("hwsecurity-ssh")

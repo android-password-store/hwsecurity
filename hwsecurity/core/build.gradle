@@ -13,7 +13,7 @@ dependencies {
     annotationProcessor 'com.ryanharter.auto.value:auto-value-parcel:0.2.6'
 
     testImplementation 'junit:junit:4.13'
-    testImplementation 'org.robolectric:robolectric:3.8'
+    testImplementation 'org.robolectric:robolectric:4.8.1'
     testImplementation 'org.mockito:mockito-core:2.18.0'
 }
 
@@ -89,7 +89,7 @@ afterEvaluate {
     }
 }
 
-dokkaHugo {
+tasks.dokkaHtml.configure {
     outputDirectory.set(file("$projectDir/../../hwsecurity.dev/content/reference"))
 
     moduleName.set("hwsecurity")
