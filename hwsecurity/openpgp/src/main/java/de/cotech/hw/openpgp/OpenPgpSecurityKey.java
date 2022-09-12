@@ -234,7 +234,9 @@ public class OpenPgpSecurityKey extends SecurityKey {
 
                 openPgpAppletConnection.refreshConnectionCapabilities();
 
-                return new PairedSecurityKey(getOpenPgpInstanceAid(),
+                return new PairedSecurityKey(getSecurityKeyName(),
+                        getSerialNumber(),
+                        getOpenPgpInstanceAid(),
                         encryptFingerprint, encryptKeyPair.getPublic(),
                         signFingerprint, signKeyPair.getPublic(),
                         authFingerprint, authKeyPair.getPublic()
@@ -249,7 +251,9 @@ public class OpenPgpSecurityKey extends SecurityKey {
 
                 openPgpAppletConnection.refreshConnectionCapabilities();
 
-                return new PairedSecurityKey(getOpenPgpInstanceAid(),
+                return new PairedSecurityKey(getSecurityKeyName(),
+                        getSerialNumber(),
+                        getOpenPgpInstanceAid(),
                         encryptFingerprint, encryptKeyPair.getPublic(),
                         null, null,
                         null, null
@@ -298,7 +302,9 @@ public class OpenPgpSecurityKey extends SecurityKey {
         byte[] signFingerprint = openPgpAppletConnection.getOpenPgpCapabilities().getFingerprintSign();
         byte[] authFingerprint = openPgpAppletConnection.getOpenPgpCapabilities().getFingerprintAuth();
 
-        return new PairedSecurityKey(getOpenPgpInstanceAid(),
+        return new PairedSecurityKey(getSecurityKeyName(),
+                getSerialNumber(),
+                getOpenPgpInstanceAid(),
                 encryptFingerprint, encryptPublicKey,
                 signFingerprint, signPublicKey,
                 authFingerprint, authPublicKey

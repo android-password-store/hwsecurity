@@ -56,6 +56,8 @@ import androidx.annotation.RestrictTo.Scope;
 public class PairedSecurityKey implements Serializable {
     private static final long serialVersionUID = 1573018456341217789L;
 
+    private final String name;
+    private final String serialNumber;
     private final byte[] securityKeyAid;
     private final byte[] encryptFingerprint;
     private final PublicKey encryptPublicKey;
@@ -70,10 +72,12 @@ public class PairedSecurityKey implements Serializable {
      * This method should only be used internally.
      */
     @RestrictTo(Scope.LIBRARY_GROUP)
-    public PairedSecurityKey(byte[] securityKeyAid,
+    public PairedSecurityKey(String name, String serialNumber, byte[] securityKeyAid,
             byte[] encryptFingerprint, PublicKey encryptPublicKey,
             byte[] signFingerprint, PublicKey signPublicKey,
             byte[] authFingerprint, PublicKey authPublicKey) {
+        this.name = name;
+        this.serialNumber = serialNumber;
         this.securityKeyAid = securityKeyAid;
         this.encryptFingerprint = encryptFingerprint;
         this.encryptPublicKey = encryptPublicKey;
@@ -82,6 +86,16 @@ public class PairedSecurityKey implements Serializable {
         this.authFingerprint = authFingerprint;
         this.authPublicKey = authPublicKey;
     }
+
+    /**
+     * Returns the security key's user-identifiable name.
+     */
+    public String getName() { return name; }
+
+    /**
+     * Returns the security key's serial number.
+     */
+    public String getSerialNumber() { return serialNumber; }
 
     /**
      * Returns the security key's AID (Application Identifier).
