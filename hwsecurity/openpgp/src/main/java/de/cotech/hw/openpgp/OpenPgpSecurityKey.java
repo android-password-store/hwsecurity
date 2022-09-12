@@ -167,6 +167,28 @@ public class OpenPgpSecurityKey extends SecurityKey {
     }
 
     /**
+     * Pair a connected security key without wiping its state.
+     */
+    @WorkerThread
+    public PairedSecurityKey pairExistingKey() throws IOException {
+        PublicKey encryptPublicKey = retrievePublicKey(KeyType.ENCRYPT);
+        PublicKey signPublicKey = retrievePublicKey(KeyType.SIGN);
+        PublicKey authPublicKey = retrievePublicKey(KeyType.AUTH);
+
+        byte[] encryptFingerprint = openPgpAppletConnection.getOpenPgpCapabilities().getFingerprintEncrypt();
+        byte[] signFingerprint = openPgpAppletConnection.getOpenPgpCapabilities().getFingerprintSign();
+        byte[] authFingerprint = openPgpAppletConnection.getOpenPgpCapabilities().getFingerprintAuth();
+
+        return new PairedSecurityKey(getSecurityKeyName(),
+                getSerialNumber(),
+                getOpenPgpInstanceAid(),
+                encryptFingerprint, encryptPublicKey,
+                signFingerprint, signPublicKey,
+                authFingerprint, authPublicKey
+        );
+    }
+
+    /**
      * This methods sets up the connected security key for signing, encryption, and authentication.
      *
      * <ol>
