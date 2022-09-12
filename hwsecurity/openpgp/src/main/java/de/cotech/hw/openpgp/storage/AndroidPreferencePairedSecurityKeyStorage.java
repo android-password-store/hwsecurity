@@ -99,6 +99,14 @@ public class AndroidPreferencePairedSecurityKeyStorage implements PairedSecurity
                 .apply();
     }
 
+    @Override
+    public void deletePairedSecurityKey(byte[] aid) {
+        String securityKeyPrefKey = getPrefKeyForSecurityKeyAid(aid);
+        sharedPreferences.edit()
+                .remove(securityKeyPrefKey)
+                .apply();
+    }
+
     private String getPrefKeyForSecurityKeyAid(byte[] securityKeyAid) {
         return PREF_PREFIX + Hex.encodeHexString(securityKeyAid);
     }

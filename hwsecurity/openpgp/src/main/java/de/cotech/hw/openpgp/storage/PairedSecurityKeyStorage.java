@@ -49,4 +49,9 @@ public interface PairedSecurityKeyStorage {
      * @exception UnsupportedOperationException if this operation is not implemented.
      */
     Set<PairedSecurityKey> getAllPairedSecurityKeys();
+
+    /**
+     * Deletes a {@link PairedSecurityKey}.
+     */
+    void deletePairedSecurityKey(byte[] securityKeyAid);
 }
