@@ -33,6 +33,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
+import android.os.Build;
 
 import androidx.annotation.AnyThread;
 import androidx.annotation.RestrictTo;
@@ -162,7 +163,11 @@ public class UsbConnectionDispatcher {
 
         Intent answerBroadcastIntent = new Intent(ACTION_USB);
         answerBroadcastIntent.setPackage(context.getApplicationInfo().packageName);
-        PendingIntent answerPendingIntent = PendingIntent.getBroadcast(context, 0, answerBroadcastIntent, 0);
+        int flags = 0;
+        if (Build.VERSION.SDK_INT >= 31) {
+            flags |= PendingIntent.FLAG_IMMUTABLE;
+        }
+        PendingIntent answerPendingIntent = PendingIntent.getBroadcast(context, 0, answerBroadcastIntent, flags);
 
         HwTimber.d("Requesting permission for %s", usbDevice.getDeviceName());
         usbManager.requestPermission(usbDevice, answerPendingIntent);
